@@ -1,0 +1,167 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.sticky-market-countdown {
+	display: none
+}
+
+.sticky-market-countdown .sticky-outer-wrapper {
+	transition: transform 420ms ease-in-out;
+}
+
+.sticky-market-countdown.inactive .sticky-outer-wrapper {
+	transform: translateY(-120%);
+	position: fixed;
+    right: 0;
+    left: 0;
+	top: 0;
+}
+
+.sticky-market-countdown.active .sticky-outer-wrapper {
+	transform: translateY(0%);
+	position: fixed;
+    right: 0;
+    left: 0;
+	top: 0;
+}
+
+.sticky-market-countdown.inactive,
+.sticky-market-countdown.active {
+	display: block;
+}
+
+.sticky-inner-wrapper  {
+	z-index: 100;
+}
+
+.navbar {
+    box-sizing: border-box;
+    top: 0;
+	border: 0;
+	margin: 0;
+	padding: 0;
+    background: white;
+    font-weight: bold;
+    color: #000;
+    transition: transform 420ms ease-in-out;
+    z-index: 10;
+	border-radius: 0;
+}
+
+.sticky-outer-wrapper.active {
+	margin: 0 auto;
+}
+
+.sticky-outer-wrapper.active .navbar,
+.sticky-market-countdown.active .navbar {
+	-webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.60);
+    -moz-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.60);
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.60);
+}
+
+.sticky-inner-wrapper {
+	left: 0;
+	right: 0;
+	width: 100%!important;
+}
+
+.navbar-sticky {
+	position: fixed;
+	animation: moveDown 0.5s ease-in-out;
+}
+
+.navbar__container {
+	max-width: 1024px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+.navbar__content {
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+.navbar__msg {
+	width: 55%;
+	padding: 30px 0;
+}
+
+.navbar__countdown {
+	padding: 15px 0;
+	text-align: right;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.navbar__countdown-msg {
+	font-size: 13px;
+	text-transform: uppercase;
+	color: #333;
+	margin-right: 10px;
+}
+
+.navbar__btn {
+	display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    justify-content: center;
+    align-items: center;
+	min-width: 150px;
+	border: none;
+	color: #fff;
+	font-size: 20px;
+	text-decoration: none;
+	text-align: center;
+}
+	.navbar__btn:hover,
+	.navbar__btn:focus {
+		background: #6ebd6c;
+		color: #fff;
+		text-decoration: none;
+	}
+
+@media screen and (max-width: 1024px) {
+	.navbar__content {
+		padding-left: 15px;
+		padding-right: 15px;
+	}	
+
+}
+
+@media screen and (max-width: 728px) {
+	.sticky-market-countdown {
+		font-size: 12px;
+	}
+
+	.navbar__btn {
+		font-size: 16px;
+	}
+}
+
+@media screen and (max-width: 660px) {
+	.navbar__container {
+		align-items: center;
+		padding-right: 15px;
+	}
+	.navbar__content {
+		flex-direction: column;
+		padding-right: 30px;
+	}
+
+	.navbar__msg {
+		width: 100%;
+		padding: 15px 0;
+	}
+
+	.navbar__btn {
+		border-radius: 3px;
+		padding: 8px;
+	}
+}

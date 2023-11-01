@@ -1,0 +1,50 @@
+.countdown-render {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.countdown-render div.countdown__segment {
+	background: #eee;
+	color: #333;
+	border-radius: 50%;
+	width: 45px;
+	height: 45px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0 3px;
+}
+
+.countdown-render > div:not(.countdown__segment) {
+	display: flex;
+	align-items: center;
+}
+
+@media screen and (max-width: 728px) {
+	.countdown-render > div {
+		width: 30px;
+		height: 30px;
+	}
+
+	.navbar__countdown-msg {
+		font-size: 11px;
+	}
+}
+
+@media screen and (max-width: 660px) {
+	.navbar__countdown {
+		padding-top: 0;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	.navbar__countdown .countdown-render {
+		justify-content: flex-start;
+		margin-bottom: 0;
+		margin-right: 8px;
+	}
+}
