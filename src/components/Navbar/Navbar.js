@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Navbar.css"; // Assuming you switch to CSS Modules
+import styles from "./Navbar.css";
 import MarketCountdown from '../MarketCountdown/MarketCountdown.js';
 import useScrollToElement from '../../hooks/useScrollToElement.js';
 

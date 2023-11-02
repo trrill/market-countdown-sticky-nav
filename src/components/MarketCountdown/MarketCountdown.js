@@ -21,7 +21,7 @@ function getNextMarketClose() {
   let end_time;
 
   if (now.day() === 0 || now.day() === 6 || now.isAfter(getFridayClose())) {
-    // If it's a weekend or after Friday close
+    // If it's a weekend or right after Friday close
     end_time = getNextMonday();
   } else if (now.isAfter(getMarketStart()) && now.isBefore(getMarketEnd())) {
     // If within market hours

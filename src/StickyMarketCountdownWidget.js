@@ -18,7 +18,7 @@ function StickyMarketCountdownWidget(props) {
   const btnColor = props.domElement.getAttribute('data-btn-color') || DEFAULT_BTN_COLOR;
   const btnHref = props.domElement.getAttribute('data-href') || DEFAULT_BTN_HREF;
 
-  // Use the hook at the top level of your component
+  // Show navbar? Depends...
   const debouncedShowNavbar = useDebounce(showNavbar, 50);
 
   useEffect(() => {
@@ -35,11 +35,11 @@ function StickyMarketCountdownWidget(props) {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Cleanup function to remove the event listener
+    // Cleanup: remove event listener
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [props.domElement, debouncedShowNavbar]); // Add debouncedShowNavbar as a dependency if it affects effect logic
+  }, [props.domElement, debouncedShowNavbar]);
 
   return (
     <Sticky>
@@ -48,7 +48,7 @@ function StickyMarketCountdownWidget(props) {
         btnText={btnText}
         btnColor={btnColor}
         btnHref={btnHref}
-        isVisible={debouncedShowNavbar} // Use the debounced value here
+        isVisible={debouncedShowNavbar} 
       />
     </Sticky>
   );
