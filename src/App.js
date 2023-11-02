@@ -1,69 +1,57 @@
-import React, {Component} from 'react'
-import Sticky from 'react-stickynode'
-import Navbar from './components/Navbar/Navbar.js'
+import React, { useEffect, useState } from 'react';
+import Sticky from 'react-stickynode';
+import Navbar from './components/Navbar/Navbar';
 
-class App extends Component {
-  constructor(props) {
-    super(props)
+function App(props) {
+  const [showNavbar, setShowNavbar] = useState(false);
 
-    this.domElement = this.props.domElement
-    this.prompt = ( this.domElement.getAttribute("data-prompt") !== null && this.domElement.getAttribute("data-prompt") !== '' ) ? this.domElement.getAttribute("data-prompt") : 'Don\'t miss out. Get these recommended stock picks before the next market close.'
-    this.btnText = ( this.domElement.getAttribute("data-btn-text") !== null && this.domElement.getAttribute("data-btn-text") !== '' ) ? this.domElement.getAttribute("data-btn-text") : 'Join Today'
-    this.btnColor = ( this.domElement.getAttribute("data-btn-color") !== null && this.domElement.getAttribute("data-btn-color") !== '' ) ? this.domElement.getAttribute("data-btn-color") : '#5fa85d'
-    this.btnHref = ( this.domElement.getAttribute("data-href") !== null && this.domElement.getAttribute("data-href") !== '' ) ? this.domElement.getAttribute("data-href") : '#order-form'
+  useEffect(() => {
+    const domElement = props.domElement;
+    const showAfterSelector = domElement.getAttribute('data-show-after');
+    const triggerElement = document.querySelector(showAfterSelector);
+  
+    // Here, we wrap handleScroll with the debounce function
+    const debouncedHandleScroll = debounce(() => {
+      if (triggerElement) {
+        const triggerPosition = triggerElement.getBoundingClientRect().top + window.pageYOffset;
+        const shouldShowNavbar = window.pageYOffset > triggerPosition;
+        setShowNavbar(shouldShowNavbar);
+      }
+    }, 50); // Debounce with a 100ms delay
+  
+    window.addEventListener('scroll', debouncedHandleScroll);
+  
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener('scroll', debouncedHandleScroll);
+    };
+  }, [props.domElement]);
+  
 
-    this.showAfter = this.domElement.getAttribute("data-show-after")
-  }
+  return (
+    <Sticky>
+      <Navbar
+        prompt={props.domElement.getAttribute('data-prompt') || 'Don\'t miss out. Get these recommended stock picks before the next market close.'}
+        btnText={props.domElement.getAttribute('data-btn-text') || 'Join Today'}
+        btnColor={props.domElement.getAttribute('data-btn-color') || '#5fa85d'}
+        btnHref={props.domElement.getAttribute('data-href') || '#order-form'}
+        isVisible={showNavbar}
+      />
+    </Sticky>
+  );
+}
 
-  // And pass them to the sticky navbar
-  render() {
-    const r = this
-    const domElement = r.domElement
-
-    if ( r.showAfter !== null ) {
-      
-
-      window.addEventListener('DOMContentLoaded', (event) => {
-        r.triggerEl = document.querySelector(r.showAfter)
-        
-     
-          window.addEventListener("scroll", function() {
-            
-            
-            if ( typeof r.triggerEl === 'undefined' || r.triggerEl === null ) {
-              return
-            } else {
-              
-              let triggerPosition = r.triggerEl.offsetTop + r.triggerEl.clientHeight
-        
-              if ( window.pageYOffset > triggerPosition ) {
-                
-                domElement.classList.add('active')
-                domElement.classList.remove('inactive')
-              } else {
-                domElement.classList.add('inactive')
-                domElement.classList.remove('active')
-              }
-            }
-          })
-        
-
-        
-
-        
-      });
-
-      
-    } else {
-      domElement.style.display = 'block'
-    }
-
-    return (
-      <Sticky>
-        <Navbar prompt={this.prompt} btnText={this.btnText} btnColor={this.btnColor} btnHref={this.btnHref} />
-      </Sticky>
-    );
-  }
+// Utility function for debouncing
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 export default App;
