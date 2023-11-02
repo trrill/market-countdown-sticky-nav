@@ -1,16 +1,10 @@
 import React from "react";
-import "./Navbar.css";
+import styles from "./Navbar.css"; // Assuming you switch to CSS Modules
 import MarketCountdown from '../MarketCountdown/MarketCountdown.js';
+import useScrollToElement from '../../hooks/useScrollToElement.js';
 
-const Navbar = ({ prompt = "Don't miss out. Get these recommended stock picks before the next market close.", btnText = "Join Today", btnColor = "#5fa85d", btnHref, isVisible = false }) => {
-  
-  function scrollToElement(id) {
-    const el = document.getElementById(id);
-    if (el !== null) {
-      const navbarHeight = document.querySelector(".navbar").clientHeight;
-      window.scroll({ top: el.offsetTop - navbarHeight - 30, left: 0, behavior: 'smooth' });
-    }
-  }
+const Navbar = ({ prompt, btnText, btnColor, btnHref, isVisible }) => {
+  const scrollToElement = useScrollToElement();
 
   function handleBtnClick(e) {
     const href = e.target.getAttribute('href');
@@ -25,20 +19,20 @@ const Navbar = ({ prompt = "Don't miss out. Get these recommended stock picks be
   }
 
   return (
-    <nav className="navbar">
-      <div className="navbar__container">
-        <div className="navbar__content">
-          <div className="navbar__msg">
+    <nav className={styles.navbar}>
+      <div className={styles.navbar__container}>
+        <div className={styles.navbar__content}>
+          <div className={styles.navbar__msg}>
             {prompt}
           </div>
-          <div className="navbar__countdown">
+          <div className={styles.navbar__countdown}>
             <MarketCountdown />
-            <div className="navbar__countdown-msg">
+            <div className={styles.navbar__countdownMsg}>
               Until Market Close
             </div>
           </div>
-        </div>	
-        <a href={btnHref} className="navbar__btn" style={{ backgroundColor: btnColor }} onClick={handleBtnClick}>
+        </div>  
+        <a href={btnHref} className={styles.navbar__btn} style={{ backgroundColor: btnColor }} onClick={handleBtnClick}>
           {btnText}
         </a>
       </div>
@@ -46,4 +40,13 @@ const Navbar = ({ prompt = "Don't miss out. Get these recommended stock picks be
   );
 };
 
-export default Navbar;
+// Doesn't hurt to set default props again.
+Navbar.defaultProps = {
+  prompt: "Don't miss out. Get these recommended stock picks before the next market close.",
+  btnText: "Join Today",
+  btnColor: "#5fa85d",
+  btnHref: "#",
+  isVisible: false
+};
+
+export default React.memo(Navbar);
