@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import StickyMarketCountdownWidget from './StickyMarketCountdownWidget'; // assuming you've renamed App.js to StickyMarketCountdownWidget.js
 
-/* Rather than a single #root div,
-* we want the ability to place multiple instances of our 
-* widget "app" on the page and pass them customizable data attributes.
-*/
-const WidgetDivs = document.querySelectorAll('.sticky-market-countdown')
+// Use camelCase for variable names
+const widgetDivs = document.querySelectorAll('.sticky-market-countdown');
 
-// Inject our React App into each
-WidgetDivs.forEach(Div => {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App domElement={Div} />
-    </React.StrictMode>,
-    Div
-  );
-})
+widgetDivs.forEach(div => {
+  // Check if 'div' is truly a DOM element
+  if (div instanceof HTMLElement) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <StickyMarketCountdownWidget domElement={div} />
+      </React.StrictMode>,
+      div
+    );
+  } else {
+    // Handle the case where the div is not an HTMLElement (optional)
+    console.error('Invalid element passed to StickyMarketCountdownWidget:', div);
+  }
+});

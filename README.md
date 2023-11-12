@@ -1,3 +1,19 @@
+# Skarrrriiipp #
+
+Oh, crazy... I just found this lil thing I made a few years ago. It was the first time I ever wrote React.js for real on my own... not just fumbling through a tutorial or fixing a lil icon or whatever in someone else's code.
+
+The niche for this is... no one, except for the folks I made this for.
+
+Rather than a single-page app, this is a React-based widget/mini-app that can be instantiated multiple times on a given page on any element. Give it some data attributes, and as the user scrolls past a target element,  lo appeareth a sticky bar with some customizable text, CTA, and a countdown to the next open/close of US stock markets.
+
+The code was from like 2020, so I updated the whole thing with now-ish best-ish practices.
+
+BYE.
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

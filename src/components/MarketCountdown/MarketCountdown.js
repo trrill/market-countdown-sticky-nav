@@ -1,66 +1,60 @@
 import React from "react";
 import Countdown from "react-countdown";
-import "./MarketCountdown.css"
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import "./MarketCountdown.css";
 
-// look into using day.js
-// https://day.js.org/docs/en/installation/node-js
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
-const MarketCountdown = () => {
-  const moment = require('moment-timezone');
-  const start = moment.tz('America/New_York').set({ 'hour': 9, 'minute': 30, 'second': 0 });
-  const end = moment.tz('America/New_York').set({ 'hour': 16, 'minute': 0, 'second': 0 });
-  const friClose = moment.tz('America/New_York').day(5).hour(16)
-  
-  let countdown_target;
-  
-  function getNextMonday() {
-    return moment().tz('America/New_York').day(1 + 7).startOf('day');
+// Utility functions for time calculations
+const getNYTime = () => dayjs().tz('America/New_York');
+
+const getMarketStart = () => getNYTime().hour(9).minute(30).second(0);
+const getMarketEnd = () => getNYTime().hour(16).minute(0).second(0);
+const getFridayClose = () => getNYTime().day(5).hour(16).minute(0).second(0);
+const getNextMonday = () => getNYTime().day(1 + 7).startOf('day').hour(16);
+
+function getNextMarketClose() {
+  const now = getNYTime();
+  let end_time;
+
+  if (now.day() === 0 || now.day() === 6 || now.isAfter(getFridayClose())) {
+    // If it's a weekend or right after Friday close
+    end_time = getNextMonday();
+  } else if (now.isAfter(getMarketStart()) && now.isBefore(getMarketEnd())) {
+    // If within market hours
+    end_time = getMarketEnd();
+  } else {
+    // If before market hours
+    end_time = now.hour() >= 16 ? getNextMonday() : getMarketStart();
   }
 
-  function getNextMarketClose(date) {
-    let end_time;
-
-    // If "today" is Fr/Sat/Sun, get closing time this coming Monday
-    if ( moment.tz('America/New_York').day() < 1 || moment.tz('America/New_York').isAfter(friClose) || moment.tz('America/New_York').day() > 4 ) {
-      end_time = getNextMonday();
-      end_time.add({hours: 16, minutes: 0}).calendar();
-
-    } else {
-      
-      if( moment().tz('America/New_York').isAfter( start ) && moment().tz('America/New_York').isBefore( end ) ) {
-        // Before today's closing
-        end_time = end;
-  
-      } else {
-        // Get tomorrow's closing
-        let startOfDay =  moment().tz('America/New_York').startOf('day');;
-        let tomorrow = startOfDay.add({days: 1, hours: 16, minutes: 0});
-        end_time = tomorrow;  
-      }
-    }
-
-    return end_time;
-  }
-  
-  countdown_target = getNextMarketClose();
-  countdown_target = countdown_target.toDate();
-  
-  return <Countdown 
-      date={countdown_target} 
-      intervalDelay={0}
-      precision={3} 
-      renderer = {
-        props => 
-          <div className="countdown-render">
-            
-          {(props.days > 0 ) ? <div><div className="countdown__segment">{props.days.toString().padStart(2, '0')}</div>:</div> : '' }
-            <div className="countdown__segment">{props.hours.toString().padStart(2, '0')}</div>:
-            <div className="countdown__segment">{props.minutes.toString().padStart(2, '0')}</div>:
-            <div className="countdown__segment">{props.seconds.toString().padStart(2, '0')}</div>:
-            <div className="countdown__segment">{Math.trunc(props.milliseconds / 10)}</div>
-          </div>
-      } 
-    /> 
+  return end_time;
 }
 
-export default MarketCountdown
+const MarketCountdown = () => {
+  const countdown_target = getNextMarketClose().toDate();
+
+  return (
+    <Countdown
+      date={countdown_target}
+      intervalDelay={0}
+      precision={3}
+      renderer={({ days, hours, minutes, seconds, milliseconds }) => (
+        <div className="countdown-render">
+          {days > 0 && (
+            <span className="countdown__segment">{String(days).padStart(2, '0')}:</span>
+          )}
+          <span className="countdown__segment">{String(hours).padStart(2, '0')}:</span>
+          <span className="countdown__segment">{String(minutes).padStart(2, '0')}:</span>
+          <span className="countdown__segment">{String(seconds).padStart(2, '0')}:</span>
+          <span className="countdown__segment">{String(Math.trunc(milliseconds / 10))}</span>
+        </div>
+      )}
+    />
+  );
+};
+
+export default MarketCountdown;

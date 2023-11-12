@@ -1,49 +1,52 @@
-import React, {useRef} from "react"
-import "./Navbar.css"
+import React from "react";
+import styles from "./Navbar.css";
 import MarketCountdown from '../MarketCountdown/MarketCountdown.js';
+import useScrollToElement from '../../hooks/useScrollToElement.js';
 
-const Navbar = ({prompt, btnText, btnColor, btnHref}) => {
-	const navBarRef = useRef(null)
+const Navbar = ({ prompt, btnText, btnColor, btnHref, isVisible }) => {
+  const scrollToElement = useScrollToElement();
 
-	function handleBtnClick(e) {
-		let btn = e.target;
-		let href = btn.getAttribute('href');
-		if ( href.startsWith('#') ) {
-			let id = href.split('#')
-			let el = document.getElementById(id[1])
-			if ( el !== null ) {
-				// We're attempting to anchor to a existing page element.
-				e.preventDefault();
-				
-				let navbarHeight = navBarRef.current.clientHeight;
-				window.scroll({ top: (el.offsetTop - navbarHeight - 30), left: 0, behavior: 'smooth' });
-			}
-		}
-	}
+  function handleBtnClick(e) {
+    const href = e.target.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      scrollToElement(href.slice(1));
+    }
+  }
 
+  if (!isVisible) {
+    return null;
+  }
 
-	
-
-	return (
-		<nav className="navbar" ref={navBarRef}>
-			<div className="navbar__container">
-				<div className="navbar__content">
-					<div className="navbar__msg">
-						{prompt}
-					</div>
-					<div className="navbar__countdown">
-						<MarketCountdown />
-						<div className="navbar__countdown-msg">
-							Until Market Close
-						</div>
-					</div>
-				</div>	
-				<a href={btnHref} className="navbar__btn" style={{backgroundColor: btnColor}} onClick={handleBtnClick}>
-					{btnText}
-				</a>
-			</div>
-		</nav>
-	);
+  return (
+    <nav className={styles.navbar}>
+      <div className={styles.navbar__container}>
+        <div className={styles.navbar__content}>
+          <div className={styles.navbar__msg}>
+            {prompt}
+          </div>
+          <div className={styles.navbar__countdown}>
+            <MarketCountdown />
+            <div className={styles.navbar__countdownMsg}>
+              Until Market Close
+            </div>
+          </div>
+        </div>  
+        <a href={btnHref} className={styles.navbar__btn} style={{ backgroundColor: btnColor }} onClick={handleBtnClick}>
+          {btnText}
+        </a>
+      </div>
+    </nav>
+  );
 };
 
-export default Navbar
+// Doesn't hurt to set default props again.
+Navbar.defaultProps = {
+  prompt: "Don't miss out. Get these recommended stock picks before the next market close.",
+  btnText: "Join Today",
+  btnColor: "#5fa85d",
+  btnHref: "#",
+  isVisible: false
+};
+
+export default React.memo(Navbar);

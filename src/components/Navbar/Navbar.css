@@ -4,10 +4,6 @@
 	box-sizing: border-box;
 }
 
-.sticky-market-countdown {
-	display: none
-}
-
 .sticky-market-countdown .sticky-outer-wrapper {
 	transition: transform 420ms ease-in-out;
 }
@@ -28,10 +24,6 @@
 	top: 0;
 }
 
-.sticky-market-countdown.inactive,
-.sticky-market-countdown.active {
-	display: block;
-}
 
 .sticky-inner-wrapper  {
 	z-index: 100;
